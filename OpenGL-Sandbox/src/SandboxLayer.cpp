@@ -16,6 +16,7 @@ void SandboxLayer::OnAttach()
 	EnableGLDebugging();
 
 	// Init here
+	glClearColor(0.6f, 0.1f, 0.1f, 1.0f);
 }
 
 void SandboxLayer::OnDetach()
@@ -31,6 +32,7 @@ void SandboxLayer::OnEvent(Event& event)
 void SandboxLayer::OnUpdate(Timestep ts)
 {
 	// Render here
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void SandboxLayer::OnImGuiRender()
