@@ -38,7 +38,6 @@ include "OpenGL-Sandbox"
 workspace "OpenGL-Examples"
     startproject "OpenGL-Examples"
     architecture "x64"
-    startproject "OpenGL-Examples"
 
     configurations
     {
