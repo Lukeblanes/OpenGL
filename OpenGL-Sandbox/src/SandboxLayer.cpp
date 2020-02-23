@@ -22,17 +22,17 @@ void SandboxLayer::OnAttach()
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	
-	// enough vertices for two quads
+	// we add different colors for each quad through the vertices
 	float vertices[] = {
-		-1.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f,
-		-1.5f,  0.5f, 0.0f,
+		-1.5f, -0.5f, 0.0f, 0.18f, 0.6f, 0.96f, 1.0f,
+		-0.5f, -0.5f, 0.0f,	0.18f, 0.6f, 0.96f, 1.0f,
+		-0.5f,  0.5f, 0.0f,	0.18f, 0.6f, 0.96f, 1.0f,
+		-1.5f,  0.5f, 0.0f,	0.18f, 0.6f, 0.96f, 1.0f,
 
-		 0.5f, -0.5f, 0.0f,
-		 1.5f, -0.5f, 0.0f,
-		 1.5f,  0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f
+		 0.5f, -0.5f, 0.0f,	1.0f, 0.93f, 0.24f, 1.0f,
+		 1.5f, -0.5f, 0.0f,	1.0f, 0.93f, 0.24f, 1.0f,
+		 1.5f,  0.5f, 0.0f,	1.0f, 0.93f, 0.24f, 1.0f,
+		 0.5f,  0.5f, 0.0f, 1.0f, 0.93f, 0.24f, 1.0f
 	};
 
 	glCreateVertexArrays(1, &m_QuadVA);
@@ -43,8 +43,12 @@ void SandboxLayer::OnAttach()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glEnableVertexArrayAttrib(m_QuadVB, 0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);
 
+	// new attribute for color
+	glEnableVertexArrayAttrib(m_QuadVB, 1);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (const void*)(sizeof(float) * 3));
+	
 	// enough indices for both quads
 	uint32_t indices[] = {
 		0, 1, 2, 2, 3, 0,
@@ -54,11 +58,6 @@ void SandboxLayer::OnAttach()
 	glCreateBuffers(1, &m_QuadIB);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_QuadIB);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	
-	// Set Color for rendered vertices
-	glUseProgram(m_Shader->GetRendererID());
-    int loc = glGetUniformLocation(m_Shader->GetRendererID(), "u_Color");
-	glUniform4f(loc, 0.3f, 0.45f, 0.1f, 1.0f);
 }
 
 void SandboxLayer::OnDetach()
