@@ -22,11 +22,17 @@ void SandboxLayer::OnAttach()
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	
+	// enough vertices for two quads
 	float vertices[] = {
+		-1.5f, -0.5f, 0.0f,
 		-0.5f, -0.5f, 0.0f,
+		-0.5f,  0.5f, 0.0f,
+		-1.5f,  0.5f, 0.0f,
+
 		 0.5f, -0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f
+		 1.5f, -0.5f, 0.0f,
+		 1.5f,  0.5f, 0.0f,
+		 0.5f,  0.5f, 0.0f
 	};
 
 	glCreateVertexArrays(1, &m_QuadVA);
@@ -39,8 +45,10 @@ void SandboxLayer::OnAttach()
 	glEnableVertexArrayAttrib(m_QuadVB, 0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
+	// enough indices for both quads
 	uint32_t indices[] = {
-		0, 1, 2, 2, 3, 0
+		0, 1, 2, 2, 3, 0,
+		4, 5, 6, 6, 7, 4,
 	};
 
 	glCreateBuffers(1, &m_QuadIB);
@@ -79,16 +87,12 @@ void SandboxLayer::OnUpdate(Timestep ts) // Render here
 
 	auto vp = m_CameraController.GetCamera().GetViewProjectionMatrix();
 	SetUniformMat4(m_Shader->GetRendererID(), "u_ViewProj", vp);
-	// SetUniformMat4(m_Shader->GetRendererID(), "u_Transform", glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
+	SetUniformMat4(m_Shader->GetRendererID(), "u_Transform", glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
 
 	glBindVertexArray(m_QuadVA);
 
-	// Typical way of rendering two different squares
-	SetUniformMat4(m_Shader->GetRendererID(), "u_Transform", glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-	SetUniformMat4(m_Shader->GetRendererID(), "u_Transform", glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	// Now we only draw once but with both quads in the buffer
+	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, nullptr);
 }
 
 void SandboxLayer::OnImGuiRender()
