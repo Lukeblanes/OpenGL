@@ -19,4 +19,6 @@ private:
 	GLCore::Utils::OrthographicCameraController m_CameraController;
 
 	GLuint m_QuadVA, m_QuadVB, m_QuadIB;
+
+	GLuint m_tex1, m_tex2;
 };
