@@ -21,4 +21,6 @@ private:
 	GLuint m_QuadVA, m_QuadVB, m_QuadIB;
 
 	GLuint m_tex1, m_tex2;
+
+	float m_QuadPosition[2] = { -1.5f, -0.5f };
 };
